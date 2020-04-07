@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sixth.springboot.mapper.EmployeeTaskMapper">
+    <resultMap id="BaseResultMap" type="com.sixth.springboot.pojo.EmployeeTask">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="emp_id" jdbcType="INTEGER" property="empId"/>
+        <!--<result column="task_id" jdbcType="INTEGER" property="taskId"/>-->
+        <result column="task_name" jdbcType="INTEGER" property="taskName"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+        <!-- 注意元素严格排序，否则报错 -->
+        <association property="task" column="task_id" select="com.sixth.springboot.mapper.TaskMapper.selectById"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, emp_id, task_id, task_name, note
+  </sql>
+
+    <select id="selectByEmpId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from springbootdemo.t_employee_task t
+        where t.emp_id = #{empId}
+    </select>
+
+</mapper>

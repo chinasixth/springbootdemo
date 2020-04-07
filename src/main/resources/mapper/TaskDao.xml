@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sixth.springboot.mapper.TaskMapper">
+    <resultMap id="BaseResultMap" type="com.sixth.springboot.pojo.Task">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="context" jdbcType="VARCHAR" property="context"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, title, context, note
+  </sql>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from springbootdemo.t_task t
+        where t.id = #{id, jdbcType=INTEGER}
+    </select>
+</mapper>

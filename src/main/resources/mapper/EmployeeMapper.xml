@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sixth.springboot.mapper.EmployeeMapper">
+    <resultMap id="BaseResultMap" type="com.sixth.springboot.pojo.Employee">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sex" property="sex" typeHandler="com.sixth.springboot.typehandler.SexEnumTypeHandler"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="position" jdbcType="VARCHAR" property="position"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+        <association property="workCard" column="id"
+                     select="com.sixth.springboot.mapper.WorkCardMapper.selectByEmpId"/>
+        <collection property="employeeTaskList" column="id"
+                    select="com.sixth.springboot.mapper.EmployeeTaskMapper.selectByEmpId"/>
+        <discriminator javaType="long" column="sex">
+            <case value="1" resultMap="maleHealthFormMapper"/>
+            <case value="0" resultMap="femaleHealthFormMapper"/>
+        </discriminator>
+    </resultMap>
+
+    <resultMap id="femaleHealthFormMapper" type="com.sixth.springboot.pojo.FemaleEmployee"
+               extends="BaseResultMap">
+        <association property="femaleHealthForm" column="id"
+                     select="com.sixth.springboot.mapper.FemaleHealthFormDao.selectById"/>
+    </resultMap>
+
+    <resultMap id="maleHealthFormMapper" type="com.sixth.springboot.pojo.MaleEmployee"
+               extends="BaseResultMap">
+        <association property="maleHealthForm" column="id"
+                     select="com.sixth.springboot.mapper.MaleHealthFormDao.selectById"/>
+    </resultMap>
+
+    <resultMap id="MyResultMap" type="com.sixth.springboot.pojo.Employee">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sex" property="sex" typeHandler="com.sixth.springboot.typehandler.SexEnumTypeHandler"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="position" jdbcType="VARCHAR" property="position"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, `name`, sex, birthday, mobile, email, `position`, note
+  </sql>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="MyResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from springbootdemo.t_employee t
+        where t.id = #{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByIdWithWorkCard" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from springbootdemo.t_employee t
+        where t.id = #{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="listAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from springbootdemo.t_employee t
+    </select>
+</mapper>

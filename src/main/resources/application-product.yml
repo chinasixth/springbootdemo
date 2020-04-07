@@ -1,0 +1,17 @@
+server:
+  port: 8888
+
+
+# 指定使用的配置文件
+#spring:
+#  application:
+#    name: ${project.artifactId}
+#  profiles:
+#    active: product
+
+
+
+user:
+  author: sixth
+  title: Spring Boot2 Demo
+  time: 2020-04-04
